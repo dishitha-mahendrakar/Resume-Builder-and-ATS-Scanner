@@ -38,7 +38,7 @@ function Certificates() {
                       label={[label, "Certificate title"]}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Missing name",
                         },
                       ]}
@@ -53,7 +53,7 @@ function Certificates() {
                       label={[label, "Certificate credential"]}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Missing credential",
                         },
                       ]}
@@ -101,7 +101,7 @@ function Certificates() {
                       label={[label, "Course Name"]}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Missing name",
                         },
                       ]}
@@ -117,7 +117,7 @@ function Certificates() {
                       label={[label, "Organization"]}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Missing organization",
                         },
                       ]}

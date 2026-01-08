@@ -40,14 +40,8 @@ function Header() {
       >
         <Container>
           <Navbar.Brand className="d-flex align-items-center cursor-pointer">
-            <img
-              src={require("../pages/images/navlogo.jpeg")}
-              onClick={() => navigate("/")}
-              alt="Resumaid Logo"
-              className="img-fluid me-2 cursor"
-              style={{ height: "40px" }} /* Adjust height here */
-            />
-            <span className="h5 mb-0">Resumaid</span>
+           
+            <span className="h5 mb-0">Resume Builder and ATS Analyser</span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
@@ -56,7 +50,8 @@ function Header() {
           >
             <Nav>
               <Nav.Link href="#about">About</Nav.Link>
-              <Nav.Link href="#contact">Contact</Nav.Link>
+              <Nav.Link href="#team">Our Team</Nav.Link>
+
               <div className="ms-3">
                 <Button
                   // variant="outlined"

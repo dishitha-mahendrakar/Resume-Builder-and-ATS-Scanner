@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Button, Carousel } from "react-bootstrap";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { MdEmail, MdPhone } from "react-icons/md";
 import TypeWriter from "typewriter-effect";
 import { useNavigate } from "react-router-dom";
 import "../resources/landing.css";
@@ -33,11 +32,12 @@ function Home() {
               <TypeWriter
                 options={{
                   strings: [
-                    "Welcome to Resumaid!",
-                    "Free ATS Evaluation",
-                    "Create Your Perfect Resume",
-                    "Get Hired Faster",
-                    "Stand Out in the Job Market",
+                      "Transform Your Resume in Minutes",
+                      "Show Hiring Managers Your Best Self",
+                      "Turn Campus Projects Into Career Wins",
+                      "Make Every Line of Your Resume Count",
+                      "From Draft to Job-Ready Resume, Fast",
+
                   ],
                   delay: 70,
                   autoStart: true,
@@ -48,8 +48,8 @@ function Home() {
             </div>
 
             <p className="lead mb-5">
-              Professional resume templates,and expert suggestions to help you
-              land your dream job.
+              Create a clear, ATS‑friendly resume that highlights your strengths in just a few clicks.
+
             </p>
             <Button
               variant="primary"
@@ -76,7 +76,7 @@ function Home() {
                     src={require("../resources/templateImages/Template-1.png")}
                     className="img-fluid w-auto object-fit-cover"
                     alt="Template 1"
-                    style={{ height: "300px" }} // Adjust height as needed
+                    style={{ height: "300px" }}
                     loading="lazy"
                   />
                   <h3>Simple Professional</h3>
@@ -93,7 +93,7 @@ function Home() {
                     src={require("../resources/templateImages/Template-4.png")}
                     className="img-fluid w-auto object-fit-cover"
                     alt="Template 4"
-                    style={{ height: "300px" }} // Adjust height as needed
+                    style={{ height: "300px" }}
                     loading="lazy"
                   />
                   <h3>Creative Resume</h3>
@@ -110,7 +110,7 @@ function Home() {
                     src={require("../resources/templateImages/Template-6.png")}
                     className="img-fluid w-auto object-fit-cover"
                     alt="Template 6"
-                    style={{ height: "300px" }} // Adjust height as needed
+                    style={{ height: "300px" }}
                     loading="lazy"
                   />
                   <h3>Modern Premium</h3>
@@ -169,77 +169,26 @@ function Home() {
           </Container>
         </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="py-5 bg-dark">
+        {/* Our Team Section (names + USN, no contact details) */}
+        <section id="team" className="py-5 bg-dark">
           <Container>
             <div className="row">
-              <div className="col-lg-6">
-                <h2 className="mb-4">Contact Us</h2>
-                <p className="lead mb-4">
-                  Have questions? We're here to help! Reach out to our team for
-                  support or feedback.
-                </p>
-                <div className="contact-info">
-                  <div className="d-flex align-items-center mb-3">
-                    <MdEmail className="me-2 fs-4" />
-                    <span>support@resumaid.com</span>
-                  </div>
-                  <div className="d-flex align-items-center mb-3">
-                    <MdPhone className="me-2 fs-4" />
-                    <span>+1 (234) 567-8900</span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-6">
+              <div className="col-lg-12">
                 <h4 className="mb-4">Our Team</h4>
                 <div className="team-members">
                   <div className="team-member mb-3">
-                    <h5 className="mb-1">Kalpit Swami</h5>
-                    <p className="mb-2">Full Stack Developer</p>
-                    <a
-                      href="https://www.linkedin.com/in/kalpit-swami-7a4554204/"
-                      className="btn btn-outline-light btn-sm"
-                    >
-                      LinkedIn Profile
-                    </a>
+                    <h5 className="mb-1">Dishitha Mahendrakar</h5>
+                    <p className="mb-2">PES1PG25CS080</p>
                   </div>
 
                   <div className="team-member mb-3">
-                    <h5 className="mb-1">Rafique Roberts</h5>
-                    <p className="mb-2">Penetration Tester</p>
-                    <a
-                      href="https://www.linkedin.com/in/rafique-roberts-8b2b2b21a/"
-                      className="btn btn-outline-light btn-sm"
-                    >
-                      LinkedIn Profile
-                    </a>
+                    <h5 className="mb-1">Ramya K Deshpande</h5>
+                    <p className="mb-2">PES1PG25CS087</p>
                   </div>
+
                   <div className="team-member mb-3">
-                    <h5 className="mb-1">Hardik Dagar</h5>
-                    <p className="mb-2">Security Analyst</p>
-                    <a
-                      href="https://www.linkedin.com/in/hardik-dagar/"
-                      className="btn btn-outline-light btn-sm"
-                    >
-                      LinkedIn Profile
-                    </a>
-                  </div>
-                  <div className="team-member mb-3">
-                    <h5 className="mb-1">Navdeep Tura</h5>
-                    <p className="mb-2">Security Project Manager</p>
-                    <a
-                      href="https://www.linkedin.com/in/navdeep-tura-63a48922/"
-                      className="btn btn-outline-light btn-sm"
-                    >
-                      LinkedIn Profile
-                    </a>
-                  </div>
-                  <div className="team-member mb-3">
-                    <h5 className="mb-1">Parameswara Reddy</h5>
-                    <p className="mb-2">Threat Intelligence Analyst</p>
-                    <button className="btn btn-outline-light btn-sm">
-                      LinkedIn Profile
-                    </button>
+                    <h5 className="mb-1">S Shree Nithya Keerthi</h5>
+                    <p className="mb-2">PES1PG25CS089</p>
                   </div>
                 </div>
               </div>
@@ -247,18 +196,7 @@ function Home() {
           </Container>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-darker py-4">
-          <Container className="text-center">
-            <p className="mb-0 d-flex justify-content-center">
-              <div className="me-2">© {new Date().getFullYear()}</div>
-              <div className="cursor" onClick={() => navigate("/")}>
-                Resumaid.
-              </div>
-              All rights reserved.
-            </p>
-          </Container>
-        </footer>
+        
       </div>
     </ThemeProvider>
   );

@@ -23,7 +23,7 @@ function ExperienceProjects() {
                       label={[label, "Activity"]}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Missing activity",
                         },
                       ]}
@@ -39,7 +39,7 @@ function ExperienceProjects() {
                       label={[label, "Activity description"]}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Missing description",
                         },
                       ]}
@@ -87,7 +87,7 @@ function ExperienceProjects() {
                       label={[label, "Interests"]}
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Missing Interests",
                         },
                       ]}

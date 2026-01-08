@@ -26,7 +26,7 @@ function ExperienceProjects() {
                       label="Designation"
                       rules={[
                         {
-                          required: true,
+                          required: false,
                           message: "Missing Designation",
                         },
                       ]}

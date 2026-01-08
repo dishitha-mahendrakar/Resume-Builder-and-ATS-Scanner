@@ -6,28 +6,33 @@ import Header from "../components/Header";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { CloudUpload, Assessment } from "@mui/icons-material";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5001";
+
 function FileUpload() {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [checkScoreDisabled, setCheckScoreDisabled] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Handle file selection
   const handleChange = (e) => {
-    const selectedFile = e.target.files[0];
+    const selectedFile = e.target.files && e.target.files[0];
+
     const allowedTypes = [
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/pdf",
     ];
 
     if (selectedFile && allowedTypes.includes(selectedFile.type)) {
       setFile(selectedFile);
       setError(null);
-      setCheckScoreDisabled(false); // Enable "Check Score" button
+      setCheckScoreDisabled(false);
     } else {
       setFile(null);
-      setError("Please select a valid .docx file.");
-      setCheckScoreDisabled(true); // Disable "Check Score" button
+      setError("Please select a valid .docx or .pdf file.");
+      setCheckScoreDisabled(true);
     }
   };
 
@@ -40,38 +45,43 @@ function FileUpload() {
       return;
     }
 
-    try {
-      // Prepare FormData for upload
-      const formData = new FormData();
-      formData.append("File", file);
+    setIsUploading(true);
+    setError(null);
 
-      // Send POST request to server
-      const response = await fetch("http://localhost:5000/upload", {
+    try {
+      const formData = new FormData();
+      formData.append("File", file); // MUST match multer: upload.single("File")
+
+      const response = await fetch(`${API_BASE}/upload`, {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error(`Upload failed: ${response.statusText}`);
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || !result?.success) {
+        const msg =
+          result?.message ||
+          `Upload failed: ${response.status} ${response.statusText}`;
+        throw new Error(msg);
       }
 
-      const result = await response.json();
+      swal({
+        title: "File uploaded successfully",
+        icon: "success",
+      });
 
-      if (result.success) {
-        swal({
-          title: "File uploaded successfully",
-          icon: "success",
-        });
-        console.log("Server Response:", result);
-        setCheckScoreDisabled(false); // Enable "Check Score" button
-        setError(null);
-      } else {
-        throw new Error(result.message || "Unknown error occurred.");
-      }
+      setCheckScoreDisabled(false);
+      setError(null);
+
+      // Optional: auto go to result page after upload
+      // navigate("/result");
     } catch (err) {
       console.error("Upload Error:", err);
-      setError(err.message || "An error occurred while uploading.");
-      setCheckScoreDisabled(true); // Disable "Check Score" button
+      setError(err?.message || "An error occurred while uploading.");
+      setCheckScoreDisabled(true);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -100,7 +110,7 @@ function FileUpload() {
                 <Form.Control
                   type="file"
                   onChange={handleChange}
-                  accept=".docx"
+                  accept=".docx,.pdf"
                   className="file-input"
                 />
                 <div className="upload-content">
@@ -111,7 +121,7 @@ function FileUpload() {
                       : "Drag & drop your resume here or click to browse"}
                   </p>
                   <p className="upload-hint">
-                    Accepts .docx format (Text-based editors only)
+                    Accepts .docx or .pdf (text-based PDFs work best)
                   </p>
                 </div>
               </div>
@@ -128,11 +138,12 @@ function FileUpload() {
                   type="submit"
                   size="lg"
                   className="d-flex align-items-center"
-                  disabled={!file}
+                  disabled={!file || isUploading}
                 >
                   <CloudUpload className="me-2" />
-                  Upload Resume
+                  {isUploading ? "Uploading..." : "Upload Resume"}
                 </Button>
+
                 <Button
                   variant="outline-primary"
                   size="lg"

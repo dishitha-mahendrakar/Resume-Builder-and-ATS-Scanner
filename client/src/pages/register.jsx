@@ -19,7 +19,7 @@ function Register() {
     setLoading(true);
     try {
       // Send the registration request to the backend (NO HASHING HERE)
-      await axios.post("http://localhost:5000/api/user/register", {
+      await axios.post("http://localhost:5001/api/user/register", {
         username: values.username,
         password: values.password, // Send plaintext password (backend will hash)
       });

@@ -17,7 +17,7 @@ function Profile() {
     const fetchProfile = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/user/profile",
+          "http://localhost:5001/api/user/profile",
           {
             withCredentials: true,
           }
@@ -39,7 +39,7 @@ function Profile() {
     setLoading(true);
     try {
       // Send updated data (encryption happens in backend)
-      await axios.post("http://localhost:5000/api/user/update", values, {
+      await axios.post("http://localhost:5001/api/user/update", values, {
         withCredentials: true,
       });
 
@@ -47,7 +47,7 @@ function Profile() {
 
       // Refetch the decrypted profile and sync localStorage again
       const response = await axios.get(
-        "http://localhost:5000/api/user/profile",
+        "http://localhost:5001/api/user/profile",
         {
           withCredentials: true,
         }

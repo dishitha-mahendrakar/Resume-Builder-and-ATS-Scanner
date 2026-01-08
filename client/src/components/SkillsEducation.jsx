@@ -44,7 +44,7 @@ function SkillsEducation() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/colleges")
+    fetch("http://localhost:5001/colleges")
       // fetch("https://resumaid.herokuapp.com/colleges")
       .then((response) => response.json())
       .then((data) => {
@@ -212,7 +212,7 @@ function SkillsEducation() {
             <div className="row">
               {fields.map(({ key, name, ...restField }) => (
                 <>
-                  <div className="col-md-4">
+                  <div className="col-md-10">
                     <Form.Item
                       {...restField}
                       name={[name, "technology"]}
@@ -226,36 +226,6 @@ function SkillsEducation() {
                       <Input placeholder="Technology" />
                     </Form.Item>
                   </div>
-
-                  <div className="col-md-4">
-                    <Form.Item
-                      {...restField}
-                      name={[name, "rating"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Rating is required",
-                        },
-                        {
-                          validator: (_, value) => {
-                            const num = parseFloat(value);
-                            if (!value)
-                              return Promise.reject("Rating is required");
-                            if (isNaN(num))
-                              return Promise.reject("Rating must be a number");
-                            if (num < 1 || num > 10)
-                              return Promise.reject(
-                                "Rating must be between 1 and 10"
-                              );
-                            return Promise.resolve();
-                          },
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Rating (1 - 10)" />
-                    </Form.Item>
-                  </div>
-
                   <div className="col-md-2">
                     <MinusCircleOutlined
                       style={{ fontSize: 23, color: "tomato" }}
@@ -265,6 +235,7 @@ function SkillsEducation() {
                 </>
               ))}
             </div>
+
             <Form.Item>
               <Button
                 type="dashed"

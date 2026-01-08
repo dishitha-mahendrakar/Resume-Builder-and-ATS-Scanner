@@ -136,19 +136,13 @@ function Template3() {
               {/* Skills */}
               {user.skills.length > 0 && (
                 <section className="skills">
-                  <h4>
-                    <u>
-                      <b>Skills</b>
-                    </u>
-                  </h4>
+                  <h4><u><b>Skills</b></u></h4>
                   {user.skills.map((skill, index) => (
-                    <div className="d-flex gap-2" key={index}>
-                      <p className="mb-2">{skill.technology}</p> :{" "}
-                      <p>{skill.rating}</p>
-                    </div>
+                    <p key={index} className="mb-2">{skill.technology}</p>  // Clean
                   ))}
                 </section>
               )}
+
             </div>
 
             {/* Right Column */}

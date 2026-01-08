@@ -1,4 +1,5 @@
 require("dotenv").config();
+const aiRoutes = require("./routes/aiRoutes");
 const express = require("express");
 const dbConnect = require("./dbConnect");
 const userRoute = require("./routes/userRoutes");
@@ -16,6 +17,9 @@ const morgan = require("morgan");
 // const { stream } = require("./logger");
 const { morganStream } = require("./morganLogger");
 const { encrypt, decrypt } = require("./utils/encryption"); // Import the encrypt function
+const pdfParse = require("pdf-parse");
+const { extractResumeJSONWithAI } = require("./utils/aiExtract");
+
 
 const app = express();
 // HTTP request logging
@@ -23,7 +27,7 @@ app.use(morgan("combined", { stream: morganStream }));
 
 const port = process.env.PORT;
 
-const allowedOrigins = ["http://localhost:3000"]; // Only allow frontend domains
+const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"]; // Only allow frontend domains
 
 // Secure HTTP Headers to Prevent Clickjacking, XSS, and Security Misconfigurations
 app.use(
@@ -73,6 +77,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/user/", userRoute);
+app.use("/api/ai", aiRoutes);
+
 
 app.use(function (req, res, next) {
   if (req.path === "/result" || req.path === "/colleges") {
@@ -91,16 +97,23 @@ const storage = multer.diskStorage({
     cb(null, "./resume-parser-master/resumeFiles/");
   },
   filename: (req, file, cb) => {
-    console.log(file);
-    //we extend and grab the name of the file
-    cb(null, Date.now() + path.extname(file.originalname));
+  const ext = path.extname(file.originalname).toLowerCase();
+  cb(null, Date.now() + ext);
   },
+
 });
+
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB limit
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (ext === ".pdf" || ext === ".docx") return cb(null, true);
+    cb(new Error("Only .pdf and .docx files are allowed"));
+  },
 });
+
 
 app.get("/debug-headers", (req, res) => {
   res.json({ headers: res.getHeaders() });
@@ -108,60 +121,102 @@ app.get("/debug-headers", (req, res) => {
 
 //single means single file, for multiple files we say upload.arrays
 //upload.single("Input tag name to be passed in which you are uploading the file")
-app.post("/upload", upload.single("File"), (req, res) => {
-  ResumeParser.parseResumeFile(
-    `./resume-parser-master/resumeFiles/${req.file.filename}`,
-    `./resume-parser-master/resumeFiles/compiled`
-  )
-    .then((file) => {
-      console.log("Yay! The file is inside compiled folder now! " + file);
-      //we used readFileSync method because  we cannot require() a json file directly in node.
+app.post("/upload", upload.single("File"), async (req, res) => {
+  try {
+    if (!req.file?.filename) {
+      return res.status(400).json({ success: false, message: "No file uploaded" });
+    }
+
+    const uploadedPath = `./resume-parser-master/resumeFiles/${req.file.filename}`;
+    const ext = path.extname(req.file.filename).toLowerCase();
+
+    let resumeText = "";
+
+    if (ext === ".pdf") {
+      const buf = fs.readFileSync(uploadedPath);
+      const parsed = await pdfParse(buf);
+      resumeText = (parsed.text || "").trim();
+    } else if (ext === ".docx") {
+      await ResumeParser.parseResumeFile(
+        uploadedPath,
+        `./resume-parser-master/resumeFiles/compiled`
+      );
+
       const resumeJson = fs.readFileSync(
         `./resume-parser-master/resumeFiles/compiled/${req.file.filename}.json`
       );
-      //parsing here is necessary because otherwise the content is shown in buffer type, console.log() to check it.
-      const resume = JSON.parse(resumeJson);
-      const resumeFile = new resumeData({
-        name: resume.name ? encrypt(resume.name) : "",
-        email: resume.email ? encrypt(resume.email) : "",
-        phone: resume.phone ? encrypt(resume.phone) : "",
-        skills: resume.skills ? encrypt(resume.skills) : "",
-        experience: resume.experience ? encrypt(resume.experience) : "",
-        education: resume.education ? encrypt(resume.education) : "",
-        projects: resume.projects ? encrypt(resume.projects) : "",
-        interests: resume.interests ? encrypt(resume.interests) : "",
-        certification: resume.certification
-          ? encrypt(resume.certification)
-          : "",
-        objective: resume.objective ? encrypt(resume.objective) : "",
-        summary: resume.summary ? encrypt(resume.summary) : "",
-        technology: resume.technology ? encrypt(resume.technology) : "",
-        languages: resume.languages ? encrypt(resume.languages) : "",
-        links: resume.links ? encrypt(resume.links) : "",
-        contacts: resume.contacts ? encrypt(resume.contacts) : "",
-        positions: resume.positions ? encrypt(resume.positions) : "",
-        profiles: resume.profiles ? encrypt(resume.profiles) : "",
-        awards: resume.awards ? encrypt(resume.awards) : "",
-        honors: resume.honors ? encrypt(resume.honors) : "",
-        additional: resume.additional ? encrypt(resume.additional) : "",
-        courses: resume.courses ? encrypt(resume.courses) : "",
-      });
 
-      return resumeFile.save();
-    })
-    .then((savedResume) => {
-      console.log("Resume saved to database:", savedResume);
-      res.json({
-        success: true,
-        message: "File Uploaded and Parsed Successfully",
+      const resume = JSON.parse(resumeJson);
+
+      const parts = [];
+      for (const k of Object.keys(resume)) {
+        const v = resume[k];
+        if (!v) continue;
+        if (Array.isArray(v)) parts.push(`${k}: ${v.join(", ")}`);
+        else parts.push(`${k}: ${v}`);
+      }
+      resumeText = parts.join("\n").trim();
+    } else {
+      return res.status(400).json({ success: false, message: "Unsupported file type" });
+    }
+
+    if (!resumeText || resumeText.length < 50) {
+      return res.status(400).json({
+        success: false,
+        message: "Could not extract readable text from resume",
       });
-    })
-    .catch((error) => {
-      console.log("parseResume failed");
-      console.error(error);
-      res.json({ success: false, message: "Error parsing uploaded file" });
+    }
+
+    console.log("AI DEBUG: extracted text length =", resumeText.length);
+    const aiResume = await extractResumeJSONWithAI(resumeText);
+    console.log("AI DEBUG: aiResume keys =", Object.keys(aiResume));
+    console.log("AI DEBUG: aiResume preview =", {
+      name: aiResume.name,
+      email: aiResume.email,
+      skills: (aiResume.skills || "").slice(0, 80),
     });
+  
+    const s = (v) => (typeof v === "string" ? v : v == null ? "" : String(v));
+
+    const resumeFile = new resumeData({
+      name: aiResume.name ? encrypt(s(aiResume.name)) : "",
+      email: aiResume.email ? encrypt(s(aiResume.email)) : "",
+      phone: aiResume.phone ? encrypt(s(aiResume.phone)) : "",
+      skills: aiResume.skills ? encrypt(s(aiResume.skills)) : "",
+      experience: aiResume.experience ? encrypt(s(aiResume.experience)) : "",
+      education: aiResume.education ? encrypt(s(aiResume.education)) : "",
+      projects: aiResume.projects ? encrypt(s(aiResume.projects)) : "",
+      interests: aiResume.interests ? encrypt(s(aiResume.interests)) : "",
+      certification: aiResume.certification ? encrypt(s(aiResume.certification)) : "",
+      objective: aiResume.objective ? encrypt(s(aiResume.objective)) : "",
+      summary: aiResume.summary ? encrypt(s(aiResume.summary)) : "",
+      technology: aiResume.technology ? encrypt(s(aiResume.technology)) : "",
+      languages: aiResume.languages ? encrypt(s(aiResume.languages)) : "",
+      links: aiResume.links ? encrypt(s(aiResume.links)) : "",
+      contacts: aiResume.contacts ? encrypt(s(aiResume.contacts)) : "",
+      positions: aiResume.positions ? encrypt(s(aiResume.positions)) : "",
+      profiles: aiResume.profiles ? encrypt(s(aiResume.profiles)) : "",
+      awards: aiResume.awards ? encrypt(s(aiResume.awards)) : "",
+      honors: aiResume.honors ? encrypt(s(aiResume.honors)) : "",
+      additional: aiResume.additional ? encrypt(s(aiResume.additional)) : "",
+      courses: aiResume.courses ? encrypt(s(aiResume.courses)) : "",
+    });
+
+    await resumeFile.save();
+
+    return res.json({
+      success: true,
+      message: "File Uploaded + AI Parsed + Saved Successfully",
+    });
+  } catch (error) {
+    console.error("UPLOAD ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: error?.message || "Error parsing uploaded file",
+    });
+  }
 });
+
 
 // -----------------------RESULT API----------------------------------------------
 
@@ -241,6 +296,14 @@ app.get("/result", async (req, res) => {
       ? decrypt(resume.courses)
       : resume.courses;
 
+    // ---- Aliases for frontend ATS scoring compatibility ----
+    resume.certifications = resume.certification;
+    resume.certificates = resume.certification;
+    resume.workexperience = resume.experience;
+    resume.profile = resume.profiles;
+    resume.achievements = resume.awards || resume.honors;
+    resume.achievement = resume.awards || resume.honors;
+    
     res.json(resume);
     console.log(resume);
   } catch (error) {

@@ -8,6 +8,8 @@ import Header from "../components/Header";
 import Score from "./score";
 import "../resources/result.css";
 
+const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5001";
+
 function Result() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +17,30 @@ function Result() {
   const [score, setScore] = useState(null);
   const [positives, setPositives] = useState([]); //  Stores positive feedback
   const [suggestions, setSuggestions] = useState([]); //  Stores improvement suggestions
+  const [aiSuggestions, setAiSuggestions] = useState(null); // object
+  const [aiSuggestLoading, setAiSuggestLoading] = useState(false);
+
+  const loadAiSuggestions = async () => {
+    try {
+      setAiSuggestLoading(true);
+
+      // ✅ IMPORTANT: call backend (5001) not frontend (3000)
+      const res = await fetch(`${API_BASE}/api/ai/suggest-latest`);
+      const data = await res.json();
+
+      if (data?.success) {
+        setAiSuggestions(data.suggestions);
+      } else {
+        setAiSuggestions(null);
+        console.error("AI suggest failed:", data);
+      }
+    } catch (err) {
+      console.error("AI suggest error:", err);
+      setAiSuggestions(null);
+    } finally {
+      setAiSuggestLoading(false);
+    }
+  };
 
   const handleGetResults = async () => {
     setIsLoading(true);
@@ -24,6 +50,9 @@ function Result() {
       setPositives(result.positives);
       setSuggestions(result.suggestions);
       setShowResults(true);
+
+      // ✅ fetch AI suggestions after score appears
+      loadAiSuggestions();
     } catch (error) {
       console.error("Error fetching score:", error);
     } finally {
@@ -73,7 +102,7 @@ function Result() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  <div className="score-content">
+                  <div className="score-content" id="report">
                     {/* Circular Score Indicator */}
                     <div className="score-circle-wrapper">
                       <motion.div
@@ -183,6 +212,87 @@ function Result() {
                         </motion.div>
                       ))}
                     </div>
+
+                    {/* AI Suggestions Section */}
+                    <div className="ai-suggestions-section">
+                      <h2 className="ai-title">AI Resume Suggestions</h2>
+
+                      {aiSuggestLoading && (
+                        <p className="ai-loading">Analyzing resume content…</p>
+                      )}
+
+                      {!aiSuggestLoading && !aiSuggestions && (
+                        <p className="ai-empty">No AI suggestions available.</p>
+                      )}
+
+                      {!aiSuggestLoading && aiSuggestions && (
+                        <>
+                          {/* Missing Sections */}
+                          {aiSuggestions.missing_sections?.length > 0 && (
+                            <div className="ai-card">
+                              <h3>Missing / Weak Sections</h3>
+                              <ul>
+                                {aiSuggestions.missing_sections.map((item, i) => (
+                                  <li key={i}>{item}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Summary Fixes */}
+                          {aiSuggestions.summary_fixes?.length > 0 && (
+                            <div className="ai-card">
+                              <h3>Summary Improvements</h3>
+                              <ul>
+                                {aiSuggestions.summary_fixes.map((item, i) => (
+                                  <li key={i}>{item}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Bullet Improvements (object-based) */}
+                          {aiSuggestions.bullet_improvements?.length > 0 && (
+                            <div className="ai-card">
+                              <h3>Bullet Point Improvements</h3>
+                              <ul>
+                                {aiSuggestions.bullet_improvements.map((item, i) => (
+                                  <li key={i}>
+                                    <strong>{item.section}:</strong> {item.suggestion}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Keywords */}
+                          {aiSuggestions.keywords_to_add?.length > 0 && (
+                            <div className="ai-card">
+                              <h3>Keywords to Add</h3>
+                              <ul>
+                                {aiSuggestions.keywords_to_add.map((item, i) => (
+                                  <li key={i}>{item}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Link Fixes */}
+                          {aiSuggestions.link_fixes?.length > 0 && (
+                            <div className="ai-card">
+                              <h3>Link Improvements</h3>
+                              <ul>
+                                {aiSuggestions.link_fixes.map((item, i) => (
+                                  <li key={i}>
+                                    <strong>{item.section}:</strong> {item.suggestion}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </>
+                      )}
+</div>
 
                     {/* Buttons for Retesting & Download */}
                     <motion.div

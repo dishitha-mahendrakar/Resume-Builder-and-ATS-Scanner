@@ -24,7 +24,7 @@ function EnableMFA() {
     const fetchQRCode = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/user/enable-mfa",
+          "http://localhost:5001/api/user/enable-mfa",
           {
             username: user.username,
           }
@@ -44,7 +44,7 @@ function EnableMFA() {
     setVerifying(true);
     const user = JSON.parse(localStorage.getItem("resume-user"));
     try {
-      await axios.post("http://localhost:5000/api/user/verify-mfa", {
+      await axios.post("http://localhost:5001/api/user/verify-mfa", {
         username: user.username,
         token: otp,
       });

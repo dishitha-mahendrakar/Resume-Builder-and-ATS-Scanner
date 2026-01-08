@@ -1,239 +1,224 @@
-import React, { useEffect, useState } from "react";
-import {
-  MailOutlined,
-  MobileOutlined,
-  LinkedinOutlined,
-} from "@ant-design/icons";
+import React, { useEffect, useMemo, useState } from "react";
+import { MailOutlined, MobileOutlined, LinkedinOutlined } from "@ant-design/icons";
 import "../../resources/templates.css";
 
 function Template6() {
-  const defaultUser = {
-    firstname: "",
-    lastname: "",
-    email: "",
-    mobileNumber: "",
-    portfolio: "",
-    address: "",
-    objective: "",
-    experience: [],
-    skills: [],
-    certificates: [],
-    courses: [],
-    projects: [],
-    education: [],
-    interests: [],
-    cocurricular: [],
-  };
+  const defaultUser = useMemo(
+    () => ({
+      firstname: "",
+      lastname: "",
+      email: "",
+      mobileNumber: "",
+      portfolio: "",
+      address: "",
+      objective: "",
+      experience: [],
+      skills: [],
+      certificates: [],
+      courses: [],
+      projects: [],
+      education: [],
+      interests: [],
+      cocurricular: [],
+    }),
+    []
+  );
 
-  const [user, setUser] = useState(() => {
-    const savedUser = JSON.parse(localStorage.getItem("resume-user"));
-    return savedUser ? { ...defaultUser, ...savedUser } : defaultUser;
-  });
+  const [user, setUser] = useState(defaultUser);
 
   useEffect(() => {
-    const updatedUser = JSON.parse(localStorage.getItem("resume-user"));
-    if (updatedUser) {
-      setUser({ ...defaultUser, ...updatedUser }); // Merge with defaults
+    const saved = localStorage.getItem("resume-user");
+    if (!saved) return;
+
+    try {
+      const parsed = JSON.parse(saved);
+      setUser({ ...defaultUser, ...parsed });
+    } catch (e) {
+      console.error("Invalid resume-user in localStorage", e);
+      setUser(defaultUser);
     }
-  }, []);
+  }, [defaultUser]);
+
+  const fullName = `${(user.firstname || "").toUpperCase()} ${(user.lastname || "").toUpperCase()}`.trim();
 
   return (
     <div className="template6-parent">
-      <div>
-        {/* Header Section */}
-        <div className="header1">
-          <h1>
-            <b>
-              {user.firstname ? user.firstname.toUpperCase() : ""}{" "}
-              {user.lastname ? user.lastname.toUpperCase() : ""}
-            </b>
-          </h1>
-          {user.objective && (
-            <>
-              <h6 className="text-left">Objective</h6>
-              <p>{user.objective}</p>
-            </>
-          )}
-        </div>
+      {/* HEADER */}
+      <div className="header1">
+        <h1 className="name">{fullName || " "}</h1>
 
-        {/* Contact Info */}
-        <div className="divide1">
-          <div className="top d-flex justify-content-center">
-            <p>
-              {user.email && (
-                <>
-                  <MailOutlined />
-                  &ensp;{user.email} &emsp;&emsp;&emsp;
-                </>
-              )}
-              {user.mobileNumber && (
-                <>
-                  <MobileOutlined />
-                  &ensp;{user.mobileNumber} &emsp;&emsp;&emsp;
-                </>
-              )}
-              {user.portfolio && (
-                <>
-                  <LinkedinOutlined />
-                  &ensp;{user.portfolio} &emsp;&emsp;&emsp;
-                </>
-              )}
-              {user.address && <>{user.address}</>}
-            </p>
+        {user.objective ? (
+          <div className="objective-block">
+            <div className="objective-title">Objective</div>
+            <p className="objective-text">{user.objective}</p>
           </div>
-        </div>
+        ) : null}
       </div>
 
-      {/* Main Content */}
-      <div className="content1">
+      {/* CONTACT BAR */}
+      <div className="divide1 contact-bar">
+        {user.email ? (
+          <span className="contact-item">
+            <MailOutlined /> <span className="contact-text">{user.email}</span>
+          </span>
+        ) : null}
+
+        {user.mobileNumber ? (
+          <span className="contact-item">
+            <MobileOutlined /> <span className="contact-text">{user.mobileNumber}</span>
+          </span>
+        ) : null}
+
+        {user.portfolio ? (
+          <span className="contact-item">
+            <LinkedinOutlined />{" "}
+            <span className="contact-text">{user.portfolio}</span>
+          </span>
+        ) : null}
+
+        {user.address ? <span className="contact-item">{user.address}</span> : null}
+      </div>
+
+      {/* MAIN CONTENT (2-COLUMN FLEX - PRINT SAFE) */}
+      <div className="content1 template6-columns">
+        {/* LEFT COLUMN */}
         <div className="divone">
           {/* Work Experience */}
-          {user.experience.length > 0 && (
-            <section className="experience mt-4">
-              <h4>
-                <b>Work Experience</b>
-              </h4>
-              <div className="divider mb-2"></div>
+          {Array.isArray(user.experience) && user.experience.length > 0 ? (
+            <section className="experience">
+              <h4 className="section-title">Work Experience</h4>
+
               {user.experience.map((exp, index) => (
-                <div key={index} className="mb-3">
-                  <div className="d-flex gap-2">
-                    <b>{index + 1}.</b>
-                    <b>{exp.designation}</b> : <b>{exp.company}</b>,{" "}
-                    <b>{exp.place}</b>
+                <div key={index} className="block">
+                  <div className="line">
+                    <b>{index + 1}.</b> <b>{exp.designation}</b>
+                    {exp.company ? (
+                      <>
+                        {" "}
+                        : <b>{exp.company}</b>
+                      </>
+                    ) : null}
+                    {exp.place ? <> , <b>{exp.place}</b></> : null}
                   </div>
-                  <h6 className="text-nowrap d-flex gap-2">
-                    <b>{exp.range}</b>
-                  </h6>
-                  <p>{exp.description}</p>
+
+                  {exp.range ? <div className="muted">{exp.range}</div> : null}
+                  {exp.description ? <p className="para">{exp.description}</p> : null}
                 </div>
               ))}
             </section>
-          )}
+          ) : null}
 
           {/* Skills */}
-          {user.skills.length > 0 && (
-            <section className="skills mt-4">
-              <h4>
-                <b>Skills</b>
-              </h4>
-              <div className="divider mb-2"></div>
+          {Array.isArray(user.skills) && user.skills.length > 0 ? (
+            <section className="skills">
+              <h4 className="section-title">Skills</h4>
               {user.skills.map((skill, index) => (
-                <div className="d-flex gap-2" key={index}>
-                  <p className="mb-2">{skill.technology}</p> :{" "}
-                  <p>{skill.rating}</p>
+                <div key={index} className="line">
+                  {skill.technology}
                 </div>
               ))}
             </section>
-          )}
+          ) : null}
 
           {/* Certificates */}
-          {user.certificates.length > 0 && (
-            <div className="certificates mt-4">
-              <h4>
-                <b>Certificates</b>
-              </h4>
-              <div className="divider mb-2"></div>
-              {user.certificates.map((certificate, index) => (
-                <div className="d-flex flex-column" key={index}>
-                  <h6>
-                    <b>{certificate.name}</b>
-                  </h6>
-                  <p>{certificate.credential}</p>
+          {Array.isArray(user.certificates) && user.certificates.length > 0 ? (
+            <section className="certificates">
+              <h4 className="section-title">Certificates</h4>
+              {user.certificates.map((c, index) => (
+                <div key={index} className="block">
+                  <div className="line">
+                    <b>{c.name}</b>
+                  </div>
+                  {c.credential ? <div className="muted">{c.credential}</div> : null}
                 </div>
               ))}
-            </div>
-          )}
+            </section>
+          ) : null}
 
           {/* Courses */}
-          {user.courses.length > 0 && (
-            <section className="courses mt-4">
-              <h4>
-                <b>Courses</b>
-              </h4>
-              <div className="divider mb-2"></div>
+          {Array.isArray(user.courses) && user.courses.length > 0 ? (
+            <section className="courses">
+              <h4 className="section-title">Courses</h4>
               {user.courses.map((course, index) => (
-                <div className="d-flex flex-column" key={index}>
-                  <h6>
+                <div key={index} className="block">
+                  <div className="line">
                     <b>{course.name}</b>
-                  </h6>
-                  <p>{course.organization}</p>
+                  </div>
+                  {course.organization ? <div className="muted">{course.organization}</div> : null}
                 </div>
               ))}
             </section>
-          )}
+          ) : null}
         </div>
 
+        {/* RIGHT COLUMN */}
         <div className="divtwo">
           {/* Projects */}
-          {user.projects.length > 0 && (
-            <section className="projects mt-4">
-              <h4>
-                <b>Personal Projects</b>
-              </h4>
-              <div className="divider mb-2"></div>
-              {user.projects.map((project, index) => (
-                <div key={index} className="d-flex flex-column">
-                  <h6>
-                    <b>{project.title}</b>
-                  </h6>
-                  <p>{project.description}</p>
+          {Array.isArray(user.projects) && user.projects.length > 0 ? (
+            <section className="projects">
+              <h4 className="section-title">Personal Projects</h4>
+              {user.projects.map((p, index) => (
+                <div key={index} className="block">
+                  <div className="line">
+                    <b>{p.title}</b>
+                  </div>
+                  {p.description ? <p className="para">{p.description}</p> : null}
                 </div>
               ))}
             </section>
-          )}
+          ) : null}
 
           {/* Education */}
-          {user.education.length > 0 && (
-            <section className="education mt-4">
-              <h4>
-                <b>Education</b>
-              </h4>
-              <div className="divider mb-2"></div>
-              {user.education.map((education, index) => (
-                <div key={index} className="mb-3">
-                  <div className="d-flex gap-2">
-                    <b>{education.qualification}</b> :<p>{education.range}</p>
+          {Array.isArray(user.education) && user.education.length > 0 ? (
+            <section className="education">
+              <h4 className="section-title">Education</h4>
+
+              {user.education.map((e, index) => (
+                <div key={index} className="block">
+                  <div className="line">
+                    <b>{e.qualification}</b>
+                    {e.range ? <span className="muted"> : {e.range}</span> : null}
                   </div>
-                  <b>{education.institution}</b>
-                  <br />
-                  <div className="d-flex gap-2">
-                    <p>{education.course}</p>:
-                    <b className="print-percentage">{education.percentage}</b>
-                  </div>
+
+                  {e.institution ? <div className="line"><b>{e.institution}</b></div> : null}
+
+                  {(e.course || e.percentage) ? (
+                    <div className="line">
+                      {e.course ? <span>{e.course}</span> : null}
+                      {e.percentage ? <span className="muted">{e.course ? " : " : ""}{e.percentage}</span> : null}
+                    </div>
+                  ) : null}
                 </div>
               ))}
             </section>
-          )}
+          ) : null}
 
           {/* Interests */}
-          {user.interests.length > 0 && (
-            <section className="interests mt-4">
-              <h4>
-                <b>Interests</b>
-              </h4>
-              <div className="divider mb-2"></div>
-              {user.interests.map((interest, index) => (
-                <p key={index}>{interest.interests}</p>
-              ))}
-            </section>
-          )}
-
-          {/* Co-Curricular Activities */}
-          {user.cocurricular.length > 0 && (
-            <section className="interests mt-4">
-              <h4>
-                <b>Co-Curricular Activities</b>
-              </h4>
-              <div className="divider mb-2"></div>
-              {user.cocurricular.map((activity, index) => (
-                <div className="d-flex gap-2" key={index}>
-                  <p>{activity.activity}</p>:
-                  <p className="d-flex">{activity.description}</p>
+          {Array.isArray(user.interests) && user.interests.length > 0 ? (
+            <section className="interests">
+              <h4 className="section-title">Interests</h4>
+              {user.interests.map((i, index) => (
+                <div key={index} className="line">
+                  {i.interests}
                 </div>
               ))}
             </section>
-          )}
-          <br />
+          ) : null}
+
+          {/* Co-Curricular */}
+          {Array.isArray(user.cocurricular) && user.cocurricular.length > 0 ? (
+            <section className="cocurricular">
+              <h4 className="section-title">Co-Curricular Activities</h4>
+              {user.cocurricular.map((a, index) => (
+                <div key={index} className="block">
+                  <div className="line">
+                    <b>{a.activity}</b>
+                  </div>
+                  {a.description ? <div className="muted">{a.description}</div> : null}
+                </div>
+              ))}
+            </section>
+          ) : null}
         </div>
       </div>
     </div>

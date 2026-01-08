@@ -1,6 +1,9 @@
-/* template page styling*/
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+/* client/src/resources/templates.css */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap");
 
+/* =========================
+   TEMPLATE GALLERY PAGE
+   ========================= */
 .home .template {
   margin: 20px;
   box-shadow: 5px 10px 18px #dfdede;
@@ -38,73 +41,127 @@
   box-shadow: 5px 10px 18px #dfdede;
 }
 
-/* template 1 styling */
+/* =========================
+   GLOBAL: remove fake colons added by some CSS
+   ========================= */
+.template1-parent h4::after,
+.template1-parent h6::after,
+.template2-parent h4::after,
+.template2-parent h6::after,
+.template3-parent h4::after,
+.template3-parent h6::after,
+.template4-parent h4::after,
+.template4-parent h6::after,
+.template5-parent h4::after,
+.template5-parent h6::after,
+.template6-parent h4::after,
+.template6-parent h6::after {
+  content: none !important;
+}
 
+/* =========================
+   TEMPLATE 1 – LIGHT THEME (BLACK TEXT)
+   ========================= */
 .template1-parent {
-  color: rgba(0, 0, 0, 0.699);
-  font-family: "Montserrat", sans-serif;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-family: "Montserrat", sans-serif !important;
+  min-height: 100vh;
 }
 
 .template1-parent .header1 {
-  color: rgb(7, 8, 44);
-  /* padding: 2.5rem; */
-  background-color: #f8f9fa;
-  border-bottom: 3px solid rgb(7, 8, 44);
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  padding: 30px;
 }
 
 .template1-parent h1 {
   font-size: 2.5rem;
+  color: #000000 !important;
+  font-weight: 700;
 }
 
 .template1-parent .divider1 {
-  background-color: rgb(7, 8, 44);
-}
-
-.template1-parent section h4 {
-  color: rgb(7, 8, 44);
-  margin-bottom: 1rem;
-  font-size: 1rem;
-}
-
-.template1-parent section h6 {
-  min-width: 150px;
-  margin: 0;
-  line-height: 1.2;
-}
-
-.template1-parent section p {
-  margin: 0;
-  line-height: 1.5;
+  background-color: #f2f2f2 !important;
+  color: #000000 !important;
+  padding: 12px 30px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 .template1-parent .content1 {
   max-width: 100%;
+  background: #ffffff !important;
+  padding: 22px 35px 40px 35px !important;
 }
 
-/* Responsive adjustments */
+/* Section headings (UNDERLINED) */
+.template1-parent section h4 {
+  color: #000000 !important;
+  margin: 18px 0 10px 0 !important;
+  font-size: 1rem;
+  font-weight: 700 !important;
+  display: inline-block;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #000000;
+}
+
+/* Force ALL content text black */
+.template1-parent p,
+.template1-parent h6,
+.template1-parent b,
+.template1-parent span,
+.template1-parent li {
+  color: #000000 !important;
+}
+
+/* Links */
+.template1-parent a {
+  color: #000000 !important;
+  text-decoration: underline;
+}
+
+.template1-parent a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .template1-parent .header1 {
     padding: 1.5rem;
   }
-
   .template1-parent h1 {
     font-size: 2rem;
   }
-
   .template1-parent .d-flex {
     flex-direction: column;
     gap: 0.5rem;
   }
-
-  .template1-parent section h6 {
-    min-width: 100%;
-  }
 }
 
-/* Print styles */
+/* Print */
 @media print {
+  * {
+    font-family: "Montserrat", sans-serif !important;
+    font-weight: 500 !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page {
+    size: A4;
+    margin: 5mm;
+  }
+
   .template1-parent {
-    font-size: 12px; /* Smaller font for print */
+    font-size: 12px;
+    background-color: #ffffff !important;
+    color: #000000 !important;
   }
 
   .template1-parent .header1 {
@@ -116,21 +173,8 @@
     font-size: 24px;
   }
 
-  .template1-parent .divider1 {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 2px !important; /* Keeps spacing between elements */
-    white-space: nowrap; /* Prevents line breaks */
-  }
-
   .template1-parent .content1 {
-    padding: 1rem;
-  }
-
-  .template1-parent section h4 {
-    font-size: 16px;
+    padding: 1rem !important;
   }
 
   .template1-parent .row {
@@ -142,25 +186,16 @@
     width: 50% !important;
   }
 
-  .template1-parent .d-flex {
-    flex-direction: row;
-  }
-
   .template1-parent section {
     page-break-inside: avoid;
   }
 }
 
-/* Template specific colors */
-.template1-parent .education h4 {
-  color: rgb(7, 8, 44);
-}
-
-/* template 2 styling */
-
+/* =========================
+   TEMPLATE 2
+   ========================= */
 .template2-parent {
   color: rgba(0, 0, 0, 0.699) !important;
-  /*padding: 50px;*/
   font-family: "Montserrat", sans-serif !important;
 }
 
@@ -223,7 +258,6 @@
   padding-left: 35px;
   padding-top: 35px;
   padding-right: 35px;
-  /* float: left; */
   position: relative;
 }
 
@@ -243,13 +277,14 @@
   .template2-parent {
     font-size: 12px;
   }
-
   .template2-parent .print-percentage {
     width: 80%;
   }
 }
-/* template 3 styling */
 
+/* =========================
+   TEMPLATE 3
+   ========================= */
 .template3-parent {
   color: rgba(0, 0, 0, 0.699) !important;
   font-family: "Montserrat", sans-serif !important;
@@ -332,11 +367,11 @@
   }
 }
 
-/* template 4 styling */
-
+/* =========================
+   TEMPLATE 4 (fixed header overlap)
+   ========================= */
 .template4-parent {
   color: rgba(0, 0, 0, 0.699) !important;
-  /*padding: 50px;*/
   font-family: "Montserrat", sans-serif !important;
 }
 
@@ -350,9 +385,8 @@
 }
 
 .template4-parent p {
-  padding: 0px;
-  margin-bottom: 0px;
-  margin-top: 2px;
+  padding: 0;
+  margin: 2px 0 0 0;
 }
 
 .template4-parent h4 {
@@ -369,18 +403,11 @@
   margin-bottom: 10px;
 }
 
-.template4-parent .divone {
-  height: 100%;
+.template4-parent .divone,
+.template4-parent .divtwo {
   width: 50%;
   float: left;
   padding: 10px;
-}
-
-.template4-parent .divtwo {
-  height: 100%;
-  width: 50%;
-  padding: 10px;
-  float: right;
 }
 
 .template4-parent .divider1 p {
@@ -395,20 +422,27 @@
 .template4-parent .header1 {
   background-color: rgb(13, 13, 61);
   color: white;
-  height: 180px;
-  padding-left: 35px;
-  padding-top: 35px;
-  padding-right: 35px;
+  height: auto;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 @media print {
   .template4-parent {
     font-size: 12px;
   }
+  .template4-parent .header1 {
+    height: auto !important;
+    min-height: unset !important;
+    position: static !important;
+  }
 }
 
-/* template 5 styling */
-
+/* =========================
+   TEMPLATE 5 (fixed header overlap)
+   ========================= */
 .template5-parent {
   color: rgba(0, 0, 0, 0.699) !important;
   font-family: "Montserrat", sans-serif !important;
@@ -459,10 +493,11 @@
 
 .template5-parent .header1 {
   color: rgb(28, 30, 80);
-  height: 140px;
-  padding-left: 35px;
-  padding-top: 35px;
-  padding-right: 35px;
+  height: auto;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .template5-parent .header1 .para {
@@ -481,10 +516,16 @@
   .template5-parent {
     font-size: 12px;
   }
+  .template5-parent .header1 {
+    height: auto !important;
+    min-height: unset !important;
+    position: static !important;
+  }
 }
 
-/* template 5 styling */
-
+/* =========================
+   TEMPLATE 6 (fixed header overlap)
+   ========================= */
 .template6-parent {
   color: rgba(0, 0, 0, 0.699) !important;
   font-family: "Montserrat", sans-serif !important;
@@ -535,10 +576,11 @@
 
 .template6-parent .header1 {
   color: rgb(58, 60, 131);
-  height: 180px;
-  padding-left: 35px;
-  padding-top: 35px;
-  padding-right: 35px;
+  height: auto;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .template6-parent .header1 .para {
@@ -558,6 +600,276 @@
   .template6-parent {
     font-size: 12px;
   }
+  .template6-parent .header1 {
+    height: auto !important;
+    min-height: unset !important;
+    position: static !important;
+  }
 }
 
+/* =========================
+   CONTACT BAR FIX (4,5,6)
+   ========================= */
+.template4-parent .contact-bar,
+.template5-parent .contact-bar,
+.template6-parent .contact-bar {
+  position: static !important;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 35px;
+  background-color: #111;
+  color: white;
+}
 
+/* ===== TEMPLATE 5: FORCE 2-COLUMN LAYOUT (NO FLOAT BUGS) ===== */
+.template5-parent .template5-columns {
+  display: flex !important;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.template5-parent .divone,
+.template5-parent .divtwo {
+  float: none !important;      /* kill old float */
+  width: 50% !important;
+  padding: 6px 10px !important;
+}
+
+/* Headings underline (consistent) */
+.template5-parent .section-title {
+  display: inline-block;
+  padding-bottom: 3px;
+  border-bottom: 2px solid rgb(28, 30, 80);
+  margin-bottom: 8px;
+}
+
+/* Reduce extra spacing */
+.template5-parent p {
+  margin-top: 1px !important;
+  margin-bottom: 1px !important;
+}
+
+/* Mobile: stack */
+@media (max-width: 768px) {
+  .template5-parent .template5-columns {
+    flex-direction: column !important;
+  }
+  .template5-parent .divone,
+  .template5-parent .divtwo {
+    width: 100% !important;
+  }
+}
+
+@media print {
+  .template5-parent .row {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+  .template5-parent .col-md-6 {
+    width: 50% !important;
+  }
+}
+
+/* ===== TEMPLATE 5: KEEP 2 COLUMNS IN PRINT/PDF ===== */
+@media print {
+  .template5-parent .template5-columns {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 18px !important;
+    align-items: flex-start !important;
+  }
+
+  .template5-parent .divone,
+  .template5-parent .divtwo {
+    float: none !important;
+    width: 50% !important;
+    display: block !important;
+  }
+
+  /* important: prevent browser from stacking due to page breaks */
+  .template5-parent .divone,
+  .template5-parent .divtwo,
+  .template5-parent section {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+/* =========================
+   TEMPLATE 6 (PRINT SAFE 2-COLUMN)
+   ========================= */
+
+.template6-parent {
+  font-family: "Montserrat", sans-serif !important;
+  color: #1c1c1c;
+  background: #ffffff;
+}
+
+/* HEADER */
+.template6-parent .header1 {
+  padding: 28px 34px 16px 34px;
+  color: rgb(58, 60, 131);
+}
+
+.template6-parent .name {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.template6-parent .objective-block {
+  margin-top: 10px;
+}
+
+.template6-parent .objective-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.template6-parent .objective-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* CONTACT BAR */
+.template6-parent .divide1.contact-bar {
+  background: rgb(58, 60, 131);
+  color: #ffffff;
+  padding: 12px 34px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.template6-parent .contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.template6-parent .contact-text {
+  color: #ffffff;
+}
+
+/* MAIN CONTENT */
+.template6-parent .content1 {
+  padding: 18px 34px 30px 34px;
+}
+
+/* 2 columns (screen + print safe) */
+.template6-parent .template6-columns {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.template6-parent .divone,
+.template6-parent .divtwo {
+  width: 50%;
+  padding: 0;
+}
+
+/* Section titles (underline rule style) */
+.template6-parent .section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgb(58, 60, 131);
+  margin: 18px 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgb(58, 60, 131);
+}
+
+/* Blocks and lines */
+.template6-parent .block {
+  margin-bottom: 10px;
+}
+
+.template6-parent .line {
+  font-size: 14px;
+  line-height: 1.35;
+  margin: 2px 0;
+}
+
+.template6-parent .para {
+  margin: 4px 0 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.template6-parent .muted {
+  color: #444;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .template6-parent .name {
+    font-size: 30px;
+  }
+
+  .template6-parent .template6-columns {
+    flex-direction: column;
+  }
+
+  .template6-parent .divone,
+  .template6-parent .divtwo {
+    width: 100%;
+  }
+}
+
+/* PRINT: FORCE 2 COLUMNS */
+@media print {
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  .template6-parent {
+    background: #ffffff !important;
+  }
+
+  .template6-parent .template6-columns {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 18px !important;
+  }
+
+  .template6-parent .divone,
+  .template6-parent .divtwo {
+    width: 50% !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .template6-parent .name {
+    font-size: 34px !important;
+  }
+
+  .template6-parent .section-title {
+    font-size: 18px !important;
+    margin: 14px 0 8px 0 !important;
+  }
+
+  .template6-parent .line {
+    font-size: 12.5px !important;
+  }
+
+  .template6-parent .para {
+    font-size: 12.2px !important;
+  }
+}
