@@ -1,4 +1,21 @@
-/node_modules
-npm-debug.log
+# Node
+node_modules/
+npm-debug.log*
+
+# Environment
+.env
+
+# Logs
+logs/
+*.log
+
+# Resume uploads (CRITICAL)
+resume-parser-master/resumeFiles/*
+resume-parser-master/resumeFiles/compiled/*
+
+# Build outputs
+dist/
+build/
+
+# OS
 .DS_Store
-/*.env
