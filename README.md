@@ -1,139 +1,228 @@
-# Resume Builder & ATS Scanner  
-*Full-Stack Development Mini Project*
+
+# PES University
+### Department of Computer Science & Engineering
 
 ---
 
-## 📌 Project Overview
+## Full Stack Development Course Mini Project
 
-This project is a **full-stack MERN web application** that allows users to:
-
-- Build professional resumes using structured input and templates
-- Upload resumes (`.pdf` / `.docx`) for **ATS (Applicant Tracking System)** analysis
-- Receive an **ATS compatibility score**
-- Get **AI-generated resume improvement suggestions**
-- Download the complete analysis report as a PDF
-
-The application demonstrates **frontend–backend integration**, **REST APIs**, **database usage**, and **AI integration**, making it suitable for a **Full Stack Development course project**.
+### Project Title
+Resume Builder and ATS Scanner with AI-Based Suggestions
 
 ---
 
-## 🧱 Tech Stack
+### Course Name
+Full Stack Development
 
-### Frontend
+### Course Code
+UE25CS621A
+
+### Academic Year
+2025 – 2026
+
+---
+
+### Submitted By
+Dishitha Mahendrakar
+
+### Guided By
+Faculty Name  
+Assistant Professor  
+Department of Computer Science & Engineering  
+PES University, Bengaluru
+
+---
+
+## Project Overview
+
+This project is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) web application designed to help users build professional resumes and evaluate them using an Applicant Tracking System (ATS). The system integrates artificial intelligence to provide meaningful, automated suggestions to improve resume quality.
+
+The application supports resume creation, resume upload in PDF or DOCX format, ATS scoring, AI-based improvement suggestions, and downloadable reports.
+
+---
+
+## System Features
+
+1. Resume Builder with multiple templates
+2. Resume upload and text extraction
+3. ATS compatibility scoring
+4. AI-generated resume improvement suggestions
+5. Downloadable ATS and AI analysis report (PDF)
+6. Fully local execution without paid APIs
+
+---
+
+## Technology Stack
+
+Frontend:
 - React.js
 - React Bootstrap
 - Framer Motion
-- Fetch API
 
-### Backend
+Backend:
 - Node.js
 - Express.js
-- MongoDB (Mongoose)
-- Multer (file uploads)
-- PDF parsing & resume extraction
+- MongoDB with Mongoose
+- Multer for file uploads
+- PDF and DOCX parsing utilities
 
-### AI Integration
-- Local / server-side LLM (example: `llama3.1:8b`)
-- AI used to generate resume improvement suggestions dynamically
-
----
-
-## ✨ Key Features
-
-### Resume Builder
-- Structured input: education, skills, experience, projects
-- Multiple resume templates
-- ATS-friendly formatting
-- Printable resumes
-
-### ATS Scanner
-- Upload resume (`.pdf` / `.docx`)
-- Resume text extraction
-- Rule-based ATS scoring
-
-### AI Resume Suggestions
-- Automatically generated (no hardcoding)
-- Missing sections detection
-- Summary and bullet-point improvements
-- Keywords to add
-- Included in downloadable PDF
+AI Integration:
+- Ollama (local LLM runtime)
+- Model: llama3.1:8b
 
 ---
 
-## 📂 Project Structure
+## Project Folder Structure
 
 ```
 Resume-Builder-and-ATS-Scanner/
-├── server/
 ├── client/
+│   ├── src/
+│   ├── package.json
+│
+├── server/
+│   ├── routes/
+│   ├── utils/
+│   ├── models/
+│   ├── package.json
+│
 ├── .env
-├── package.json
-└── README.md
+├── README.md
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup and Execution Instructions
 
-### 1️⃣ Prerequisites
-- Node.js (v16+)
-- npm
-- MongoDB
+### Prerequisites
 
-### 2️⃣ Clone Repository
+Ensure the following software is installed on the system:
+
+- Node.js (version 18 or higher)
+- npm (bundled with Node.js)
+- MongoDB (local installation or MongoDB Atlas)
+- Git
+- Ollama (for AI suggestions)
+
+---
+
+## Backend Setup
+
+1. Navigate to the server directory:
+
 ```bash
-git clone https://github.com/<your-username>/Resume-Builder-and-ATS-Scanner.git
-cd Resume-Builder-and-ATS-Scanner
+cd server
 ```
 
-### 3️⃣ Install Dependencies
+2. Install backend dependencies:
+
 ```bash
 npm install
-cd client
-npm install
-cd ..
 ```
 
-### 4️⃣ Environment Variables
-
-Create `.env` in root:
+3. Create a `.env` file inside the server directory with the following contents:
 
 ```env
 PORT=5001
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_secret
-ENCRYPTION_KEY=32_byte_key
+MONGO_URI=mongodb://127.0.0.1:27017/resume_ats
 AI_MODEL=llama3.1:8b
 ```
 
-### 5️⃣ Run Application
+---
+
+## AI Setup (Ollama)
+
+1. Install Ollama from:
+https://ollama.com
+
+2. Pull the required model:
+
 ```bash
-npm run dev
+ollama pull llama3.1:8b
 ```
 
-Frontend: http://localhost:3000  
-Backend: http://localhost:5001  
+3. Start the Ollama service:
+
+```bash
+ollama serve
+```
+
+Ensure Ollama is running before starting the backend.
 
 ---
 
-## 🎓 Course Relevance
+## Start Backend Server
 
-- MERN stack implementation
-- REST APIs
-- File uploads
-- AI integration
-- Real-world ATS use case
+From the server directory:
 
----
+```bash
+npm start
+```
 
-## 📌 Notes
-- `.env` must not be committed
-- AI suggestions are dynamic
-- Upload logic remains unchanged
+The backend will run on:
+http://localhost:5001
 
 ---
 
-## ✅ Ready to Run
+## Frontend Setup
 
-Once dependencies and environment variables are set, the project runs on any lab system.
+1. Navigate to the client directory:
 
+```bash
+cd client
+```
+
+2. Install frontend dependencies:
+
+```bash
+npm install
+```
+
+3. Start the frontend:
+
+```bash
+npm start
+```
+
+The frontend will run on:
+http://localhost:3000
+
+---
+
+## Using the Application
+
+1. Open the application in the browser at http://localhost:3000
+2. Upload a resume file in PDF or DOCX format
+3. Click "Get Your Results"
+4. View ATS score and rule-based feedback
+5. View AI-generated resume improvement suggestions
+6. Download the complete report as a PDF
+
+---
+
+## Troubleshooting
+
+- Ensure MongoDB service is running
+- Ensure Ollama is running before accessing AI suggestions
+- Verify AI endpoint:
+  http://localhost:5001/api/ai/suggest-latest
+- Restart backend if AI model changes
+
+---
+
+## Course Relevance
+
+This project demonstrates:
+
+- Full stack MERN development
+- RESTful API design
+- File upload handling
+- AI model integration
+- Frontend-backend synchronization
+- Practical industry-relevant ATS use case
+
+---
+
+## Declaration
+
+This project is developed as part of the Full Stack Development course at PES University and is intended solely for academic purposes.
