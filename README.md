@@ -1,5 +1,5 @@
 # Resume Builder & ATS Scanner  
-*MERN Stack Full-Stack Development Project*
+*Full-Stack Development Mini Project*
 
 ---
 
@@ -136,3 +136,4 @@ Backend: http://localhost:5001
 ## ✅ Ready to Run
 
 Once dependencies and environment variables are set, the project runs on any lab system.
+
