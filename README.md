@@ -23,13 +23,9 @@ UE25CS621A
 ---
 
 ### Submitted By
-Dishitha Mahendrakar
-
-### Guided By
-Faculty Name  
-Assistant Professor  
-Department of Computer Science & Engineering  
-PES University, Bengaluru
+Dishitha Mahendrakar	PES1PG25CS080
+S Shree Nithya Keerthi	PES1PG25CS089
+Ramya K Deshpande	PES1PG25CS087
 
 ---
 
@@ -226,3 +222,4 @@ This project demonstrates:
 ## Declaration
 
 This project is developed as part of the Full Stack Development course at PES University and is intended solely for academic purposes.
+
